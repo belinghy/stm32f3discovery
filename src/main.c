@@ -10,6 +10,7 @@
 
 #include "Timer.h"
 #include "BlinkLed.h"
+#include "Gyroscope.h"
 
 #include "stm32f3_discovery.h"
 // ----------------------------------------------------------------------------
@@ -51,13 +52,20 @@
 #define BLINK_ON_TICKS  (TIMER_FREQUENCY_HZ * 2 / 3)
 #define BLINK_OFF_TICKS (TIMER_FREQUENCY_HZ - BLINK_ON_TICKS)
 
+// ----- Useful functions -------------------------------------------
+#define ABS(x) (x < 0) ? (-x) : x
+
+
 // Private Variables
 __IO uint32_t UserButtonPressed = 0;
 __IO uint8_t DataReady = 0;
 
 float MagBuffer[3] = {0.0f};
 float AccBuffer[3] = {0.0f};
+
 float GyroBuffer[3] = {0.0f};
+uint8_t Xval = 0x00;
+uint8_t Yval = 0x00;
 
 
 
@@ -147,7 +155,36 @@ main(int argc, char* argv[])
       STM_EVAL_LEDOff(LED10);
 
       GyroReadAngRate(GyroBuffer);
+      Xval = ABS((int8_t)(GyroBuffer[0]));
+      Yval = ABS((int8_t)(GyroBuffer[1]));
+
+      if (Xval > Yval) {
+        if ((int8_t)GyroBuffer[0] > 5.0f) {
+          STM_EVAL_LEDOn(LED10);
+        }
+        if ((int8_t)GyroBuffer[0] < -5.0f) {
+          STM_EVAL_LEDOn(LED3);
+        }
+      } else {
+        if ((int8_t)GyroBuffer[1] > 5.0f) {
+          STM_EVAL_LEDOn(LED7);
+        }
+        if ((int8_t)GyroBuffer[1] < -5.0f) {
+          STM_EVAL_LEDOn(LED6);
+        }
+      }
     }
+
+    DataReady = 0x00;
+
+    STM_EVAL_LEDOff(LED3);
+    STM_EVAL_LEDOff(LED4);
+    STM_EVAL_LEDOff(LED5);
+    STM_EVAL_LEDOff(LED6);
+    STM_EVAL_LEDOff(LED7);
+    STM_EVAL_LEDOff(LED8);
+    STM_EVAL_LEDOff(LED9);
+    STM_EVAL_LEDOff(LED10);
   }
 
 }

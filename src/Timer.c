@@ -15,6 +15,7 @@ timer_tick (void);
 
 // ----------------------------------------------------------------------------
 
+extern __IO uint8_t DataReady;
 volatile timer_ticks_t timer_delayCount;
 RCC_ClocksTypeDef RCC_Clocks;
 
@@ -56,6 +57,7 @@ void
 SysTick_Handler (void)
 {
   timer_tick ();
+  DataReady++;
 }
 
 // ----------------------------------------------------------------------------

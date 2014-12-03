@@ -27,6 +27,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3_discovery_l3gd20.h"
+#include "stm32f30x_spi.h"
 
 __IO uint32_t  L3GD20Timeout = L3GD20_FLAG_TIMEOUT;  
 
@@ -413,6 +414,10 @@ uint32_t L3GD20_TIMEOUT_UserCallback(void)
   while (1)
   {   
   }
+}
+#else
+uint32_t L3GD20_TIMEOUT_UserCallback(void) {
+  return 0;
 }
 #endif /* USE_DEFAULT_TIMEOUT_CALLBACK */
 
