@@ -609,6 +609,10 @@ uint32_t LSM303DLHC_TIMEOUT_UserCallback(void)
   {   
   }
 }
+#else
+uint32_t LSM303DLHC_TIMEOUT_UserCallback(void) {
+  return 0;
+}
 #endif /* USE_DEFAULT_TIMEOUT_CALLBACK */
   
 
